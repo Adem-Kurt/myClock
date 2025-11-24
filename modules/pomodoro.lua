@@ -59,6 +59,7 @@ function Pomodoro:constructor(...)
                 self.remainingTime = self.sessions[self.currentSessionIndex].duration - elapsedTime - self.pausedTime
 
                 if self.remainingTime <= 0 then
+                    self.pomodoroTimeLabel.text = "00:00"
                     self:nextSession()
                 else
                     local minutes = math.floor(self.remainingTime / 60)
