@@ -157,7 +157,6 @@ function window:onClose()
 end
 
 showPanel("timer")
-window.visible = true
 window:updateLayout()
 
 ui.run(window):wait()
