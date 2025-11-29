@@ -69,6 +69,7 @@ function Timer:constructor(...)
 
                 parent.totalSeconds = (hours * 3600) + (minutes * 60) + seconds
                 parent.remainingSeconds = parent.totalSeconds
+                parent.pausedTime = 0
 
                 if parent.totalSeconds == 0 then
                     parent.running = false
@@ -78,10 +79,11 @@ function Timer:constructor(...)
                 parent.timerHoursInput.enabled = false
                 parent.timerMinutesInput.enabled = false
                 parent.timerSecondsInput.enabled = false
+            else
+                parent.pausedTime = parent.totalSeconds - parent.remainingSeconds
             end
 
             parent.startTime = sys.Datetime()
-            parent.pausedTime = 0
             self.text = "Stop"
         else
             parent.running = false
