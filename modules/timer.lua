@@ -25,6 +25,14 @@ function Timer:constructor(...)
     self.timerSecondsInput.textalign = "center"
     self.timerSecondsInput.fontsize = 15
 
+    local function removeString(s)
+        if #s.text > 0 and tonumber(s.text) == nil then
+            s.text = s.text:gsub("%D", "")
+        end
+    end
+
+    self.timerHoursInput.onChange, self.timerMinutesInput.onChange, self.timerSecondsInput.onChange = removeString, removeString, removeString
+
     self.timerStartStopButton = ui.Button(timer, "Start", 0, 150, 100, 30)
     self.timerResetButton = ui.Button(timer, "Reset", 0, 150, 100, 30)
 
