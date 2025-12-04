@@ -21,8 +21,14 @@ function window:toggleMaximize()
         window:maximize()
     end
 end
-function window:onMaximize() self.maximized = true end
-function window:onRestore()  self.maximized = false end
+function window:onMaximize()
+    self.maximized = true
+    self.updateLayout()
+end
+function window:onRestore()
+    self.maximized = false
+    self.updateLayout()
+end
 window:status()
 
 local windowBarHeight = 30
@@ -119,8 +125,23 @@ function windowBarOpenTimerButton:onClick()     showPanel("timer") end
 function windowBarOpenPomodoroButton:onClick()  showPanel("pomodoro") end
 
 function window:updateLayout()
-    local windowHeight = self.height
-    local windowWidth = self.width
+    local windowHeight = window.height
+    local windowWidth = window.width
+
+    if window.maximized then
+        windowHeight = windowHeight - 14
+        windowWidth = windowWidth - 14
+
+        windowBar.x = 8
+        windowBar.y = 7
+        contentPanel.x = windowBar.x
+        contentPanel.height = windowHeight - windowBarHeight - statusBarHeight + 8
+    else
+        windowBar.x = 0
+        windowBar.y = 0
+        contentPanel.x = 0
+        contentPanel.height = windowHeight - windowBarHeight - statusBarHeight
+    end
 
     windowBar.width = windowWidth
 
@@ -131,8 +152,8 @@ function window:updateLayout()
     windowBarTitle.x = windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width
     windowBarTitle.width = minimizeLabel.x - (windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width)
 
+    contentPanel.y = windowBar.y + windowBar.height
     contentPanel.width = windowWidth
-    contentPanel.height = windowHeight - windowBarHeight - statusBarHeight
 
     stopwatchPanel.width = contentPanel.width
     stopwatchPanel.height = contentPanel.height
