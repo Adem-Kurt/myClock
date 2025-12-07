@@ -10,6 +10,9 @@ local defaultSettings = {
         y = 100
     },
     theme = "default",
+    shortcuts = {
+            toggleFullscreen = "f",
+        },
 }
 
 

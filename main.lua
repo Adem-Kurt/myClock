@@ -21,12 +21,18 @@ function window:toggleMaximize()
         window:maximize()
     end
 end
+function window:toggleFullscreen()
+    window.fullscreen = not window.fullscreen
+    window:updateLayout()
+end
 function window:onMaximize()
     self.maximized = true
     self.updateLayout()
 end
 function window:onRestore()
-    self.maximized = false
+    if not window.fullscreen then
+        window.maximized = false
+    end
     self.updateLayout()
 end
 window:status()
@@ -128,18 +134,27 @@ function window:updateLayout()
     local windowHeight = window.height
     local windowWidth = window.width
 
-    if window.maximized then
+    if window.maximized and not window.fullscreen then
         windowHeight = windowHeight - 14
         windowWidth = windowWidth - 14
 
+        windowBar.visible = true
         windowBar.x = 8
         windowBar.y = 7
         contentPanel.x = windowBar.x
+        contentPanel.y = windowBar.y + windowBar.height
         contentPanel.height = windowHeight - windowBarHeight - statusBarHeight + 8
+    elseif window.fullscreen then
+        windowBar.visible = false
+        contentPanel.y = 0
+        contentPanel.x = 0
+        contentPanel.height = windowHeight - statusBarHeight
     else
+        windowBar.visible = true
         windowBar.x = 0
         windowBar.y = 0
         contentPanel.x = 0
+        contentPanel.y = windowBar.y + windowBar.height
         contentPanel.height = windowHeight - windowBarHeight - statusBarHeight
     end
 
@@ -152,7 +167,6 @@ function window:updateLayout()
     windowBarTitle.x = windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width
     windowBarTitle.width = minimizeLabel.x - (windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width)
 
-    contentPanel.y = windowBar.y + windowBar.height
     contentPanel.width = windowWidth
 
     stopwatchPanel.width = contentPanel.width
@@ -170,12 +184,15 @@ function window:onMove()   window:updateLayout() end
 
 function window:onClose()
     settings:set("window.maximized", window.maximized)
+    if self.fullscreen then window.fullscreen = false end
     if self.maximized then window:restore() end
     settings:set("window.x", window.x)
     settings:set("window.y", window.y)
     settings:set("window.width", window.width)
     settings:set("window.height", window.height)
 end
+
+window:shortcut(settings:get("shortcuts.toggleFullscreen"), window.toggleFullscreen)
 
 showPanel("timer")
 window:updateLayout()
