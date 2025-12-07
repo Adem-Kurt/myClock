@@ -53,11 +53,32 @@ function Settings:get(key)
         if type(value) == "table" and value[k] ~= nil then
             value = value[k]
         else
-            return nil
+            value = nil
+            break
         end
     end
-    return value
 
+    if value ~= nil then
+        return value
+    end
+
+    local defaultValue = defaultSettings
+    for _, k in ipairs(keys) do
+        if type(defaultValue) == "table" then
+            defaultValue = defaultValue[k]
+        else
+            defaultValue = nil
+            break
+        end
+    end
+
+    if defaultValue == nil then
+        return nil
+    end
+
+    self:set(key, defaultValue)
+
+    return defaultValue
 end
 
 function Settings:set(key, value)
