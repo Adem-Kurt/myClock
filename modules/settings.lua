@@ -7,7 +7,8 @@ local defaultSettings = {
         width = 800,
         height = 600,
         x = 100,
-        y = 100
+        y = 100,
+        alwaysOnTop = false,
     },
     theme = "default",
     shortcuts = {

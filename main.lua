@@ -13,6 +13,7 @@ local window = ui.Window("", "raw",settings:get("window.width"), settings:get("w
 window.x = settings:get("window.x")
 window.y = settings:get("window.y")
 window.maximized = settings:get("window.maximized")
+window.topmost = settings:get("window.alwaysOnTop")
 if window.maximized then window:maximize() end
 function window:toggleMaximize()
     if window.maximized then
@@ -91,6 +92,21 @@ function minimizeLabel:onClick() window:minimize() end
 minimizeLabel.fontsize = 15
 minimizeLabel.textalign = "center"
 
+local windowBarMenu = ui.Menu()
+local windowBarMenuAlwaysOnTopItem = windowBarMenu:add("Always On Top")
+windowBarMenuAlwaysOnTopItem.onClick = function(self)
+    window.topmost = not window.topmost
+    self.checked = window.topmost
+end
+windowBarMenuAlwaysOnTopItem.checked = window.topmost
+
+local windowBarMenuLabel = ui.Label(windowBar, "⋯", 0, 0, 45, windowBarHeight)
+windowBarMenuLabel.fontsize = 15
+windowBarMenuLabel.textalign = "center"
+function windowBarMenuLabel:onHover() windowBarMenuLabel.bgcolor = 0x373737 end
+function windowBarMenuLabel:onLeave() windowBarMenuLabel.bgcolor = nil end
+function windowBarMenuLabel:onClick() window:popup(windowBarMenu) end
+
 local function setWindowTitle(title)
     windowBarTitle.text = title
     window.title = title
@@ -163,9 +179,10 @@ function window:updateLayout()
     closeLabel.x = windowWidth - 45
     maximizeLabel.x = windowWidth - 90
     minimizeLabel.x = windowWidth - 135
+    windowBarMenuLabel.x = windowWidth - 180
 
     windowBarTitle.x = windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width
-    windowBarTitle.width = minimizeLabel.x - (windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width)
+    windowBarTitle.width = windowBarMenuLabel.x - (windowBarOpenPomodoroButton.x + windowBarOpenPomodoroButton.width)
 
     contentPanel.width = windowWidth
 
@@ -183,6 +200,7 @@ function window:onMove()   window:updateLayout() end
 
 
 function window:onClose()
+    settings:set("window.alwaysOnTop", window.topmost)
     settings:set("window.maximized", window.maximized)
     if self.fullscreen then window.fullscreen = false end
     if self.maximized then window:restore() end
