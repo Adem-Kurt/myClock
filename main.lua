@@ -126,6 +126,8 @@ local pomodoroPanel = Pomodoro(contentPanel, 0, 0, 0, 0)
 pomodoroPanel.bgcolor = 0x202020
 
 
+local activePanel = nil
+
 local function showPanel(mode)
     for widget in each { stopwatchPanel, timerPanel, pomodoroPanel} do
         widget.visible = false
@@ -133,12 +135,16 @@ local function showPanel(mode)
 
     if mode == "stopwatch" then
         stopwatchPanel.visible = true
+        activePanel = stopwatchPanel
     elseif mode == "timer" then
         timerPanel.visible = true
+        activePanel = timerPanel
     elseif mode == "pomodoro" then
         pomodoroPanel.visible = true
+        activePanel = pomodoroPanel
     else
         stopwatchPanel.visible = true
+        activePanel = stopwatchPanel
     end
 end
 
@@ -211,6 +217,19 @@ function window:onClose()
 end
 
 window:shortcut(settings:get("shortcuts.toggleFullscreen"), window.toggleFullscreen)
+window:shortcut(settings:get("shortcuts.startStop"), function()
+    if activePanel and activePanel.toggle then
+        activePanel:toggle()
+    end
+end)
+window:shortcut(settings:get("shortcuts.reset"), function()
+    if activePanel and activePanel.reset then
+        activePanel:reset()
+    end
+end)
+window:shortcut(settings:get("shortcuts.showStopwatch"), function() showPanel("stopwatch") end)
+window:shortcut(settings:get("shortcuts.showTimer"), function() showPanel("timer") end)
+window:shortcut(settings:get("shortcuts.showPomodoro"), function() showPanel("pomodoro") end)
 
 showPanel("timer")
 window:updateLayout()

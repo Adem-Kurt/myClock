@@ -17,27 +17,33 @@ function Stopwatch:constructor(...)
     self.startTime = nil
     self.elapsed = 0
 
-    function self.stopwatchStartStopButton:onClick()
-        local parent = self.parent
-        if not parent.running then
-            parent.running = true
-            parent.startTime = sys.Datetime()
-            self.text = "Stop"
+    function self:toggle()
+        if not self.running then
+            self.running = true
+            self.startTime = sys.Datetime()
+            self.stopwatchStartStopButton.text = "Stop"
         else
             local now = sys.Datetime()
-            local diff = now:interval(parent.startTime, "seconds") / 1000
-            parent.elapsed = parent.elapsed + diff
-            parent.running = false
-            self.text = "Start"
+            local diff = now:interval(self.startTime, "seconds") / 1000
+            self.elapsed = self.elapsed + diff
+            self.running = false
+            self.stopwatchStartStopButton.text = "Start"
         end
     end
 
+    function self:reset()
+        self.running = false
+        self.elapsed = 0
+        self.stopwatchTimeLabel.text = "00:00:00.000"
+        self.stopwatchStartStopButton.text = "Start"
+    end
+
+    function self.stopwatchStartStopButton:onClick()
+        self.parent:toggle()
+    end
+
     function self.stopwatchResetButton:onClick()
-        local parent = self.parent
-        parent.running = false
-        parent.elapsed = 0
-        parent.stopwatchTimeLabel.text = "00:00:00.000"
-        parent.stopwatchStartStopButton.text = "Start"
+        self.parent:reset()
     end
 
     local i = 0

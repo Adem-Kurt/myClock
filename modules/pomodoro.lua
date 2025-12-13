@@ -43,7 +43,7 @@ function Pomodoro:constructor(...)
 
     function self.pomodoroStartStopButton:onClick()
         local parent = self.parent
-        parent:startStop()
+        parent:toggle()
     end
 
     function self.pomodoroResetButton:onClick()
@@ -73,7 +73,7 @@ function Pomodoro:constructor(...)
     task()
 end
 
-function Pomodoro:startStop()
+function Pomodoro:toggle()
     if self.alarmRinging then
         self.alarm:stop()
         self.alarmRinging = false

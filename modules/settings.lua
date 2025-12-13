@@ -13,6 +13,11 @@ local defaultSettings = {
     theme = "default",
     shortcuts = {
             toggleFullscreen = "f",
+            startStop = "s",
+            reset = "r",
+            showStopwatch = "1",
+            showTimer = "2",
+            showPomodoro = "3",
         },
 }
 

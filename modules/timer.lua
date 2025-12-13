@@ -63,40 +63,42 @@ function Timer:constructor(...)
         self:updateButtonsLayout()
     end
 
-    function self.timerStartStopButton:onClick()
-        local parent = self.parent
+    function self:toggle()
+        if self.alarmRinging then
+            self:reset()
+        elseif not self.running then
+            self.running = true
+            if self.remainingSeconds == 0 then
+                local hours = tonumber(self.timerHoursInput.text) or 0
+                local minutes = tonumber(self.timerMinutesInput.text) or 0
+                local seconds = tonumber(self.timerSecondsInput.text) or 0
 
-        if parent.alarmRinging then
-            parent:reset()
-        elseif not parent.running then
-            parent.running = true
-            if parent.remainingSeconds == 0 then
-                local hours = tonumber(parent.timerHoursInput.text) or 0
-                local minutes = tonumber(parent.timerMinutesInput.text) or 0
-                local seconds = tonumber(parent.timerSecondsInput.text) or 0
+                self.totalSeconds = (hours * 3600) + (minutes * 60) + seconds
+                self.remainingSeconds = self.totalSeconds
+                self.pausedTime = 0
 
-                parent.totalSeconds = (hours * 3600) + (minutes * 60) + seconds
-                parent.remainingSeconds = parent.totalSeconds
-                parent.pausedTime = 0
-
-                if parent.totalSeconds == 0 then
-                    parent.running = false
+                if self.totalSeconds == 0 then
+                    self.running = false
                     return
                 end
 
-                parent.timerHoursInput.enabled = false
-                parent.timerMinutesInput.enabled = false
-                parent.timerSecondsInput.enabled = false
+                self.timerHoursInput.enabled = false
+                self.timerMinutesInput.enabled = false
+                self.timerSecondsInput.enabled = false
             else
-                parent.pausedTime = parent.totalSeconds - parent.remainingSeconds
+                self.pausedTime = self.totalSeconds - self.remainingSeconds
             end
 
-            parent.startTime = sys.Datetime()
-            self.text = "Stop"
+            self.startTime = sys.Datetime()
+            self.timerStartStopButton.text = "Stop"
         else
-            parent.running = false
-            self.text = "Start"
+            self.running = false
+            self.timerStartStopButton.text = "Start"
         end
+    end
+
+    function self.timerStartStopButton:onClick()
+        self.parent:toggle()
     end
 
     function self.timerResetButton:onClick()
