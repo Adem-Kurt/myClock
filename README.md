@@ -10,7 +10,7 @@ A simple desktop clock application built with [LuaRT](https://luart.org/).
 
 ## Running the Application
 
-To run the application, you will need LuaRT installed. Then, execute the following command in the project root:
+To run the application, you will need LuaRT installed. Then, execute the following command in the `src` folder:
 
 ```bash
 wluart main.lua
