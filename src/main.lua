@@ -234,4 +234,4 @@ window:shortcut(settings:get("shortcuts.showPomodoro"), function() showPanel("po
 showPanel("timer")
 window:updateLayout()
 
-ui.run(window):wait()
+await(window:showasync())
