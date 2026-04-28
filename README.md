@@ -8,12 +8,24 @@ A simple desktop clock application built with [LuaRT](https://luart.org/).
 - **Timer:** Countdown from a specified time.
 - **Pomodoro:** A pomodoro timer to help with productivity.
 
-## Running the Application
+## Usage
 
-To run the application, you will need LuaRT installed. Then, execute the following command in the `src` folder:
+You can use the `project.lua` script to both build and run the application. You will need [LuaRT](https://luart.org/) installed.
+
+### Running the Application
+
+To run the application:
 
 ```bash
-wluart main.lua
+luart project.lua run
+```
+
+### Building the Application
+
+To compile the application into a standalone executable (placed in the `bin/` directory):
+
+```bash
+luart project.lua build
 ```
 
 ## Attribution

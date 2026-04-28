@@ -1,0 +1,12 @@
+name: "MyClock"
+version: "1.0.0-dev"
+entry: "main.lua"
+output: "myClock.exe"
+icon: "assets/icons/stopwatch.ico"
+desktopApp: true
+staticBuild: true
+
+modules:
+  - "ui"
+  - "json"
+  - "audio"
