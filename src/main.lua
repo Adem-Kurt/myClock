@@ -129,21 +129,17 @@ pomodoroPanel.bgcolor = 0x202020
 local activePanel = nil
 
 local function showPanel(mode)
-    for widget in each { stopwatchPanel, timerPanel, pomodoroPanel} do
-        widget.visible = false
-    end
-
-    if mode == "stopwatch" then
-        stopwatchPanel.visible = true
+if mode == "stopwatch" then
+        stopwatchPanel:tofront()
         activePanel = stopwatchPanel
     elseif mode == "timer" then
-        timerPanel.visible = true
+        timerPanel:tofront()
         activePanel = timerPanel
     elseif mode == "pomodoro" then
-        pomodoroPanel.visible = true
+        pomodoroPanel:tofront()
         activePanel = pomodoroPanel
     else
-        stopwatchPanel.visible = true
+        stopwatchPanel:tofront()
         activePanel = stopwatchPanel
     end
 end
