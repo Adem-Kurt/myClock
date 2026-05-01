@@ -6,7 +6,7 @@ Stopwatch = Object(ui.Panel)
 function Stopwatch:constructor(...)
     local Stopwatch = ui.Panel.constructor(self, ...)
 
-    self.stopwatchTimeLabel = ui.Label(Stopwatch, "00:00:00.000", 0, 20, 0, 60)
+    self.stopwatchTimeLabel = ui.Label(Stopwatch, "00:00:00", 0, 20, 0, 60)
     self.stopwatchTimeLabel.fontsize = 50
     self.stopwatchTimeLabel.textalign = "center"
 
@@ -24,7 +24,7 @@ function Stopwatch:constructor(...)
             self.stopwatchStartStopButton.text = "Stop"
         else
             local now = sys.Datetime()
-            local diff = now:interval(self.startTime, "seconds") / 1000
+            local diff = now:interval(self.startTime, "seconds")
             self.elapsed = self.elapsed + diff
             self.running = false
             self.stopwatchStartStopButton.text = "Start"
@@ -34,7 +34,7 @@ function Stopwatch:constructor(...)
     function self:reset()
         self.running = false
         self.elapsed = 0
-        self.stopwatchTimeLabel.text = "00:00:00.000"
+        self.stopwatchTimeLabel.text = "00:00:00"
         self.stopwatchStartStopButton.text = "Start"
     end
 
@@ -46,19 +46,16 @@ function Stopwatch:constructor(...)
         self.parent:reset()
     end
 
-    local i = 0
     local task = sys.Task(function()
         while not self.terminated do
             if self.running then
-                i = i + 1
                 local now = sys.Datetime()
-                local diff = now:interval(self.startTime, "seconds") / 1000
+                local diff = now:interval(self.startTime, "seconds")
                 local total = self.elapsed + diff
                 local h = math.floor(total / 3600)
                 local m = math.floor((total % 3600) / 60)
                 local s = math.floor(total % 60)
-                local ms = math.floor((total % 1) * 1000)
-                self.stopwatchTimeLabel.text = string.format("%02d:%02d:%02d.%03d", h, m, s, ms)
+                self.stopwatchTimeLabel.text = string.format("%02d:%02d:%02d", h, m, s)
             end
             sleep()
         end
