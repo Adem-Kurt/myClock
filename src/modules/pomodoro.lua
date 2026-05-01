@@ -91,10 +91,12 @@ function Pomodoro:toggle()
     elseif not self.running then
         self.running = true
         self.startTime = sys.Datetime()
-        self.pausedTime = 0
         self.pomodoroStartStopButton.text = "Stop"
     else
         self.running = false
+        local now = sys.Datetime()
+        local elapsedTime = now:interval(self.startTime, "seconds")
+        self.pausedTime = self.pausedTime + elapsedTime
         self.pomodoroStartStopButton.text = "Start"
     end
 end
