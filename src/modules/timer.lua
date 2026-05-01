@@ -106,7 +106,7 @@ function Timer:constructor(...)
     end
 
     local task = sys.Task(function()
-        while not ui.task.terminated do
+        while not self.terminated do
             if self.running then
                 if self.remainingSeconds <= 0 then
                     self.remainingSeconds = 0

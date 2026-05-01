@@ -52,7 +52,7 @@ function Pomodoro:constructor(...)
     end
 
     local task = sys.Task(function()
-        while not ui.task.terminated do
+        while not self.terminated do
             if self.running then
                 local now = sys.Datetime()
                 local elapsedTime = now:interval(self.startTime, "seconds")

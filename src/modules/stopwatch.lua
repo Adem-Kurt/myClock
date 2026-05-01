@@ -48,7 +48,7 @@ function Stopwatch:constructor(...)
 
     local i = 0
     local task = sys.Task(function()
-        while not ui.task.terminated do
+        while not self.terminated do
             if self.running then
                 i = i + 1
                 local now = sys.Datetime()
