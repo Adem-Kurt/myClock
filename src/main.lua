@@ -3,6 +3,7 @@ local Settings = require "modules.settings"
 local Stopwatch = require "modules.stopwatch"
 local Timer = require "modules.timer"
 local Pomodoro = require "modules.pomodoro"
+local AboutWindow = require "modules.aboutWindow"
 local settings = Settings()
 
 if settings:get("theme") ~= "default" then
@@ -99,6 +100,14 @@ windowBarMenuAlwaysOnTopItem.onClick = function(self)
     self.checked = window.topmost
 end
 windowBarMenuAlwaysOnTopItem.checked = window.topmost
+
+windowBarMenu:add("")
+
+local windowBarMenuAboutItem = windowBarMenu:add("About")
+windowBarMenuAboutItem.onClick = function()
+    local about = AboutWindow()
+    window:showmodal(about)
+end
 
 local windowBarMenuLabel = ui.Label(windowBar, "⋯", 0, 0, 45, windowBarHeight)
 windowBarMenuLabel.fontsize = 15

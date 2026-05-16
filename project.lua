@@ -23,6 +23,24 @@ local action = arg[1] or "help"
 local function build()
     print("--- Build Process Started [${name} v${config.version or '1.0'}] ---")
 
+    local versionFile = sys.File("src/version.lua")
+    local commitHash = "unknown"
+
+    local gitCheck = sys.cmd('git -v', true)
+
+    if gitCheck == true then
+        local handle = io.popen("git rev-parse --short HEAD 2>nul")
+        commitHash = handle:read("*l") or "unknown"
+        handle:close()
+    else
+        commitHash = "none"
+    end
+
+    versionFile:open("write", "binary")
+    versionFile:write('return {\n    version = "' .. (config.version or "1.0") .. '",\n    commit = "' .. commitHash .. '"\n}\n')
+    versionFile:close()
+    print("Injected version: " .. (config.version or "1.0") .. " (" .. commitHash .. ")")
+
     local bin = sys.Directory("bin")
     if not bin.exists then bin:make() end
 
@@ -47,6 +65,11 @@ local function build()
 
     local status = sys.cmd(rtcCmd)
     sys.currentdir = oldCwd
+
+    versionFile:open("write", "binary")
+    versionFile:write('return {\n    version = "dev",\n    commit = "none"\n}\n')
+    versionFile:close()
+    print("Reset version.lua to 'dev'")
 
     if sys.File(outputPath).exists then
         print("--- Build Completed Successfully! ---")
